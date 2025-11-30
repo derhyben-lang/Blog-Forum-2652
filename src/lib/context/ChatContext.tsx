@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext, ReactNode } from "react";
-import { useChat } from "@ai-sdk/react";
+import { createContext, useContext, useState, ReactNode } from "react";
+import { useChat } from "ai/react";
 
 type ChatContextType = {
   messages: any[];
@@ -15,9 +15,22 @@ type ChatContextType = {
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export function ChatProvider({ children }: { children: ReactNode }) {
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setInput } = useChat({
+  const { messages, append, isLoading } = useChat({
     api: "/api/chat",
   });
+
+  const [input, setInput] = useState("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (input.trim() === "") return;
+    append({ role: "user", content: input });
+    setInput("");
+  };
 
   const clearChat = () => {
     setInput("");
