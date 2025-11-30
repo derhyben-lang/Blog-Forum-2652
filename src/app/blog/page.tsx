@@ -54,9 +54,18 @@ export default async function BlogPage() {
         </div>
       </section>
       
-      <BlogPostsGrid 
-  featuredPosts={featuredPosts.map(post => ({ ...post, publishedAt: post.publishedAt ? new Date(post.publishedAt) : null }))} 
-  regularPosts={regularPosts.map(post => ({ ...post, publishedAt: post.publishedAt ? new Date(post.publishedAt) : null }))} 
+      <<BlogPostsGrid
+  featuredPosts={featuredPosts.map(post => ({
+    ...post,
+    publishedAt: post.publishedAt ? new Date(post.publishedAt) : null,
+    isFeatured: !!post.isFeatured,   // ← cette ligne en plus résout tout
+  }))}
+  regularPosts={regularPosts.map(post => ({
+    ...post,
+    publishedAt: post.publishedAt ? new Date(post.publishedAt) : null,
+    isFeatured: !!post.isFeatured,   // ← et ici aussi
+  }))}
+/>
 />
     </div>
   );
