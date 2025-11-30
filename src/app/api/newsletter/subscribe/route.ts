@@ -1,8 +1,7 @@
 import { db } from "@/db";
 import { newsletterSubscribers } from "@/db/schema";
 import { NextResponse } from "next/server";
-
-export async function POST(request: Request) {
+import { eq } from 'drizzle-orm';export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const email = formData.get("email") as string;
