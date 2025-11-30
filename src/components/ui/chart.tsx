@@ -103,7 +103,6 @@ ${colorConfig
 }
 
 const ChartTooltip = RechartsPrimitive.Tooltip
-
 function ChartTooltipContent({
   active,
   payload,
@@ -134,10 +133,7 @@ function ChartTooltipContent({
       )}
       <div className="flex items-center gap-2">
         {!hideIndicator && (
-          <div
-            className="w-2 h-2 rounded-full shrink-0"
-            style={{ backgroundColor: data.color }}
-          />
+          <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: data.color }} />
         )}
         <div className="text-sm">
           {formatter ? formatter(data.value, data.name || "") : data.value}
@@ -145,8 +141,7 @@ function ChartTooltipContent({
       </div>
     </div>
   )
-}
-    >
+}    >
       {!nestLabel ? tooltipLabel : null}
       <div className="grid gap-1.5">
         {payload.map((item, index) => {
