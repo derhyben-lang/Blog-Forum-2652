@@ -21,8 +21,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   const {
     messages,
-    input,
-    handleInputChange,
+  
     handleSubmit,
     isLoading,
     append,
