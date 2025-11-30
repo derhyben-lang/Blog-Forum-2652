@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         type: "forum" as const,
         id: thread.id,
         title: thread.title,
-        excerpt: thread.content.substring(0, 150) + "...",
+        excerpt: "",
         slug: thread.slug,
         authorName: thread.authorName,
         date: thread.createdAt.toISOString(),
