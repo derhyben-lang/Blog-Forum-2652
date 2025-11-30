@@ -1,34 +1,34 @@
 "use client";
 
+import { createContext, useContext, useState, ReactNode } from "react";
 import { useChat } from "@ai-sdk/react";
-import { useChat } from "ai/react";
 
 type ChatContextType = {
   messages: any[];
   input: string;
-  handleInputChange: (e: any) => void;
-  handleSubmit: (e: any) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: (e: React.FormEvent) => void;
   isLoading: boolean;
 };
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export function ChatProvider({ children }: { children: ReactNode }) {
-  const { messages, append, isLoading } = useChat({
+  const { messages, append, status } = useChat({
     api: "/api/chat",
   });
 
   const [input, setInput] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-    append({ role: "user", content: input });
-    setInput("");
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (input.trim() === "") return;
+    append({ role: "user", content: input });
+    setInput("");
   };
 
   return (
@@ -38,7 +38,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         input,
         handleInputChange,
         handleSubmit,
-        isLoading,
+        isLoading: status === "in_progress",
       }}
     >
       {children}
