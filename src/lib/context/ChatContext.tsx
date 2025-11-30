@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { useChat } from "@ai-sdk/react";
 import { useChat } from "ai/react";
 
 type ChatContextType = {
