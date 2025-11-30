@@ -201,7 +201,7 @@ export default async function ForumPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Messages</span>
                   <span className="font-bold">
-                    {recentThreads.reduce((acc, thread) => acc + thread.replyCount, 0)}
+                    {recentThreads.reduce((acc, thread) => acc + (thread.replyCount ?? 0), 0)}
                   </span>
                 </div>
               </CardContent>
