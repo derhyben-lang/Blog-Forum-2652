@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
         excerpt: post.excerpt || "",
         slug: post.slug,
         authorName: post.authorName,
-        date: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
+       date: post.publishedAt?.toISOString() || post.createdAt,
       })),
       ...threads.map((thread) => ({
         type: "forum" as const,
