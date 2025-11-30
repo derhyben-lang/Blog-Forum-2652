@@ -112,6 +112,14 @@ function ChartTooltipContent({
   labelFormatter,
   labelClassName,
   formatter,
+}: {
+  active?: boolean
+  className?: string
+  hideLabel?: boolean
+  hideIndicator?: boolean
+  labelFormatter?: (value: any) => string
+  labelClassName?: string
+  formatter?: (value: any, name: string) => any
 }) {
   if (!active) return null;
 
