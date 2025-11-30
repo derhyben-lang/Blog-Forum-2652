@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       .where(
         or(
           like(forumThreads.title, searchTerm),
-          like(forumThreads.content, searchTerm)
+          like(forumThreads.body, searchTerm)
         )
       )
       .orderBy(desc(forumThreads.createdAt))
