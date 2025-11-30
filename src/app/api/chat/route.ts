@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       messages,
       system: 'Tu es un assistant IA serviable pour un blog et forum tech francophone. Tu aides les utilisateurs avec leurs questions sur le développement web, les technologies et les sujets du blog. Réponds en français de manière claire et concise.',
       temperature: 0.7,
-      maxTokens: 1024,
+      maxOutputTokens: 1024,
     });
 
     return result.toDataStreamResponse();
