@@ -106,66 +106,45 @@ const ChartTooltip = RechartsPrimitive.Tooltip
 
 function ChartTooltipContent({
   active,
+  payload,
   className,
   hideLabel = false,
   hideIndicator = false,
   labelFormatter,
-  labelClassName,
   formatter,
 }: {
   active?: boolean
+  payload?: any[]
   className?: string
   hideLabel?: boolean
   hideIndicator?: boolean
-  labelFormatter?: (value: any) => string
-  labelClassName?: string
+  labelFormatter?: (value: any) => any
   formatter?: (value: any, name: string) => any
 }) {
-  if (!active) return null;
+  if (!active || !payload || payload.length === 0) return null
 
-  // On récupère le payload via le contexte Recharts (c’est la nouvelle façon)
-  const { payload: tooltipPayload } = useTooltipContext();
-
-  if (!tooltipPayload?.length) return null;
-
-  const payload = tooltipPayload[0];
-
-  const tooltipLabel = React.useMemo(() => {
-    if (hideLabel) return null;
-    if (!payload) return null;
-
-    const label = payload.payload?.label ?? payload.name;
-    if (!label) return null;
-
-    return labelFormatter ? labelFormatter(label) : label;
-  }, [payload, hideLabel, labelFormatter]);
+  const data = payload[0]
 
   return (
-    <div className={cn("rounded-lg border bg-background shadow-sm", className)}>
-      <div className={cn("px-3 py-2", labelClassName)}>
-        {tooltipLabel && <div className="text-sm font-medium">{tooltipLabel}</div>}
-      </div>
-      {payload && (
-        <div className="border-t px-3 py-2">
-          <div className="flex items-center gap-2">
-            {!hideIndicator && (
-              <div
-                className="shrink-0 rounded-full"
-                style={{
-                  width: 8,
-                  height: 8,
-                  backgroundColor: payload.color,
-                }}
-              />
-            )}
-            <div className="text-sm">
-              {formatter ? formatter(payload.value, payload.name) : payload.value}
-            </div>
-          </div>
+    <div className={cn("rounded-lg border bg-background shadow-sm p-2", className)}>
+      {!hideLabel && data.payload?.label && (
+        <div className="text-xs font-medium mb-1">
+          {labelFormatter ? labelFormatter(data.payload.label) : data.payload.label}
         </div>
       )}
+      <div className="flex items-center gap-2">
+        {!hideIndicator && (
+          <div
+            className="w-2 h-2 rounded-full shrink-0"
+            style={{ backgroundColor: data.color }}
+          />
+        )}
+        <div className="text-sm">
+          {formatter ? formatter(data.value, data.name || "") : data.value}
+        </div>
+      </div>
     </div>
-  );
+  )
 }
     >
       {!nestLabel ? tooltipLabel : null}
