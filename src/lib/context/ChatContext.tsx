@@ -14,7 +14,7 @@ type ChatContextType = {
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export function ChatProvider({ children }: { children: ReactNode }) {
-  const { messages, append, status } = useChat({
+  const { messages, append, isLoading } = useChat({
     api: "/api/chat",
   });
 
@@ -26,7 +26,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (input.trim() === "") return;
+    if (!input.trim()) return;
     append({ role: "user", content: input });
     setInput("");
   };
@@ -38,7 +38,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         input,
         handleInputChange,
         handleSubmit,
-        isLoading: status === "in_progress",
+        isLoading,
       }}
     >
       {children}
