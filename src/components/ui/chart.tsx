@@ -107,74 +107,58 @@ const ChartTooltip = RechartsPrimitive.Tooltip
 function ChartTooltipContent({
   active,
   className,
-  indicator = "dot",
   hideLabel = false,
   hideIndicator = false,
-  
   labelFormatter,
   labelClassName,
   formatter,
-  color,
-  nameKey,
-  labelKey,
-}: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-  React.ComponentProps<"div"> & {
-    hideLabel?: boolean
-    hideIndicator?: boolean
-    indicator?: "line" | "dot" | "dashed"
-    nameKey?: string
-    labelKey?: string
-  }) {
-  const { config } = useChart()
+}: ChartTooltipContentProps) {
+  if (!active) return null;
+
+  // On récupère le payload via le contexte Recharts (c’est la nouvelle façon)
+  const { payload: tooltipPayload } = useTooltipContext();
+
+  if (!tooltipPayload?.length) return null;
+
+  const payload = tooltipPayload[0];
 
   const tooltipLabel = React.useMemo(() => {
-    if (hideLabel || !payload?.length) {
-      return null
-    }
+    if (hideLabel) return null;
+    if (!payload) return null;
 
-    const [item] = payload
-    const key = `${labelKey || item?.dataKey || item?.name || "value"}`
-    const itemConfig = getPayloadConfigFromPayload(config, item, key)
-    const value =
-      !labelKey && typeof label === "string"
-        ? config[label as keyof typeof config]?.label || label
-        : itemConfig?.label
+    const label = payload.payload?.label ?? payload.name;
+    if (!label) return null;
 
-    if (labelFormatter) {
-      return (
-        <div className={cn("font-medium", labelClassName)}>
-          {labelFormatter(value, payload)}
-        </div>
-      )
-    }
-
-    if (!value) {
-      return null
-    }
-
-    return <div className={cn("font-medium", labelClassName)}>{value}</div>
-  }, [
-    label,
-    labelFormatter,
-    payload,
-    hideLabel,
-    labelClassName,
-    config,
-    labelKey,
-  ])
-
-  if (!active || !payload?.length) {
-    return null
-  }
-
-  const nestLabel = payload.length === 1 && indicator !== "dot"
+    return labelFormatter ? labelFormatter(label) : label;
+  }, [payload, hideLabel, labelFormatter]);
 
   return (
-    <div
-      className={cn(
-        "border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
-        className
+    <div className={cn("rounded-lg border bg-background shadow-sm", className)}>
+      <div className={cn("px-3 py-2", labelClassName)}>
+        {tooltipLabel && <div className="text-sm font-medium">{tooltipLabel}</div>}
+      </div>
+      {payload && (
+        <div className="border-t px-3 py-2">
+          <div className="flex items-center gap-2">
+            {!hideIndicator && (
+              <div
+                className="shrink-0 rounded-full"
+                style={{
+                  width: 8,
+                  height: 8,
+                  backgroundColor: payload.color,
+                }}
+              />
+            )}
+            <div className="text-sm">
+              {formatter ? formatter(payload.value, payload.name) : payload.value}
+            </div>
+          </div>
+        </div>
       )}
+    </div>
+  );
+}
     >
       {!nestLabel ? tooltipLabel : null}
       <div className="grid gap-1.5">
