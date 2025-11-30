@@ -112,7 +112,7 @@ function ChartTooltipContent({
   labelFormatter,
   labelClassName,
   formatter,
-}: ChartTooltipContentProps) {
+}) {
   if (!active) return null;
 
   // On récupère le payload via le contexte Recharts (c’est la nouvelle façon)
