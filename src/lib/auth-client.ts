@@ -57,5 +57,5 @@ export function useSession(): SessionData {
       fetchSession();
    }, []);
 
-   return { data: session, isPending, error, refetch: () => void refetch() };
+  return { data: session, isPending, error, refetch: async () => { await refetch(); } };
 }
