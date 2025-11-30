@@ -195,7 +195,7 @@ export default async function ForumPage() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Discussions</span>
                   <span className="font-bold">
-                    {categories.reduce((acc, cat) => acc + cat.postCount, 0)}
+                   { categories.reduce((acc, cat) => acc + (cat.postCount ?? 0), 0) }
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
