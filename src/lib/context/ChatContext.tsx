@@ -26,7 +26,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim()) return;
+    if (input.trim() === "") return;
     append({ role: "user", content: input });
     setInput("");
   };
