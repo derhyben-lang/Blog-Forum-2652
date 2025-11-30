@@ -1,0 +1,5 @@
+{
+  "installCommand": "bun install --force",
+  "buildCommand": "bun run build",
+  "framework": "nextjs"
+}
