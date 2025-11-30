@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     const existing = await db
       .select()
       .from(newsletterSubscribers)
-      .where((t) => t.email === email)
+     .where(eq(newsletterSubscribers.email, email))
       .limit(1);
 
     if (existing.length > 0) {
