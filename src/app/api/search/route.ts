@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
         excerpt: "",
         slug: thread.slug,
         authorName: thread.authorName,
-        date: thread.createdAt.toISOString(),
+        date: thread.createdAt,
       })),
     ].slice(0, 10); // Limit to 10 total results
 
