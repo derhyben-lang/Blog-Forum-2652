@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       maxOutputTokens: 1024,
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error) {
     console.error('Chat API error:', error);
     
