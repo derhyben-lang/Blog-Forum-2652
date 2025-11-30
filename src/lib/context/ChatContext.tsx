@@ -1,83 +1,44 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useChat } from '@ai-sdk/react';
+import { createContext, useContext, useState, ReactNode } from "react";
+import { useChat } from "ai/react";
 
-interface ChatContextType {
+type ChatContextType = {
   messages: any[];
   input: string;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  handleInputChange: (e: any) => void;
+  handleSubmit: (e: any) => void;
   isLoading: boolean;
-  append: (message: any) => Promise<void>;
-  setMessages: (messages: any[]) => void;
-  clearChat: () => void;
-}
+};
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
-export function ChatProvider({ children }: { children: React.ReactNode }) {
-  const [isMounted, setIsMounted] = useState(false);
-
-  const {
-    messages,
-  
-    handleSubmit,
-    isLoading,
-    append,
-    setMessages,
-  } = useChat({
-    api: '/api/chat',
-    initialInput: '',
-    onError: (error) => {
-      console.error('Chat error:', error);
-    },
+export function ChatProvider({ children }: { children: ReactNode }) {
+  const { messages, append, isLoading } = useChat({
+    api: "/api/chat",
   });
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const [input, setInput] = useState("");
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    if (isMounted) {
-      const saved = localStorage.getItem('chatHistory');
-      if (saved && messages.length === 0) {
-        try {
-          const parsedMessages = JSON.parse(saved);
-          if (Array.isArray(parsedMessages) && parsedMessages.length > 0) {
-            setMessages(parsedMessages);
-          }
-        } catch (e) {
-          console.error('Failed to load chat history');
-        }
-      }
-    }
-  }, [isMounted, messages.length, setMessages]);
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    append({ role: "user", content: input });
+    setInput("");
+  };
 
-  // Persist to localStorage
-  useEffect(() => {
-    if (isMounted && messages.length > 0) {
-      localStorage.setItem('chatHistory', JSON.stringify(messages));
-    }
-  }, [messages, isMounted]);
-
-  const clearChat = () => {
-    setMessages([]);
-    localStorage.removeItem('chatHistory');
+  const handleInputChange = (e: any) => {
+    setInput(e.target.value);
   };
 
   return (
     <ChatContext.Provider
       value={{
         messages,
-        input: input ?? '',
+        input,
         handleInputChange,
         handleSubmit,
         isLoading,
-        append,
-        setMessages,
-        clearChat,
       }}
     >
       {children}
@@ -85,10 +46,10 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useChatContext() {
+export const useChatContext = () => {
   const context = useContext(ChatContext);
   if (!context) {
-    throw new Error('useChatContext must be used within ChatProvider');
+    throw new Error("useChatContext must be used within ChatProvider");
   }
   return context;
-}
+};
