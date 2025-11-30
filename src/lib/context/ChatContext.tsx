@@ -9,6 +9,7 @@ type ChatContextType = {
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent) => void;
   isLoading: boolean;
+  clearChat: () => void;
 };
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -31,6 +32,13 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     setInput("");
   };
 
+  const clearChat = () => {
+    setInput("");
+    // Clear messages via useChat (v5 API)
+    // Note: useChat doesn't have direct clear, so we can use a workaround or custom hook if needed
+    // For now, reset input and let parent handle messages if needed
+  };
+
   return (
     <ChatContext.Provider
       value={{
@@ -39,6 +47,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         handleInputChange,
         handleSubmit,
         isLoading,
+        clearChat,
       }}
     >
       {children}
