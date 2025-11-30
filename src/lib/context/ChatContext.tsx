@@ -20,14 +20,14 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const [input, setInput] = useState("");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
     append({ role: "user", content: input });
     setInput("");
   };
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
 
