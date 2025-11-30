@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       await db
         .update(forumThreads)
         .set({
-          replyCount: thread[0].replyCount + 1,
+          replyCount: (thread[0]?.replyCount ?? 0) + 1,
           lastReplyAt: now,
         })
         .where(eq(forumThreads.id, threadId));
