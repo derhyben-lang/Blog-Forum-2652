@@ -2,7 +2,6 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import { useChat } from "@ai-sdk/react";
-import { openai } from "@ai-sdk/openai";
 
 type ChatContextType = {
   messages: any[];
@@ -17,8 +16,7 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export function ChatProvider({ children }: { children: ReactNode }) {
   const { messages, sendMessage, status } = useChat({
-    model: openai("gpt-4o-mini"),
-    apiKey: process.env.OPENAI_API_KEY!,
+    // Default transport points to /api/chat, model and apiKey handled server-side
   });
 
   const [input, setInput] = useState("");
