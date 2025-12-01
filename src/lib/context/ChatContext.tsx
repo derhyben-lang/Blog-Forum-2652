@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode } from "react";
 import { useChat } from "@ai-sdk/react";
-import { createOpenAI } from "@ai-sdk/openai";
+import { createClient } from "@ai-sdk/openai";
 
 type ChatContextType = {
   messages: any[];
@@ -15,14 +15,14 @@ type ChatContextType = {
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
-const openai = createOpenAI({
+const client = createClient({
   apiKey: process.env.OPENAI_API_KEY!,
   baseURL: "/api/chat",  // Custom endpoint for proxy
 });
 
 export function ChatProvider({ children }: { children: ReactNode }) {
   const { messages, sendMessage, status } = useChat({
-    api: openai,
+    client,  // Use the client for /api/chat proxy
   });
 
   const [input, setInput] = useState("");
