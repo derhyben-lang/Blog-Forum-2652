@@ -28,7 +28,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() === "") return;
-    sendMessage(input);
+    sendMessage({ role: "user", content: input });
     setInput("");
   };
 
